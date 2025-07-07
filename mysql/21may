@@ -1,0 +1,103 @@
+USE worker;
+
+SELECT * FROM worker;
+
+INSERT INTO Worker 
+    (FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+    ('Monika', 'Arora', 100000, '2014-02-20 09:00:00', 'HR'),
+    ('Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin'),
+    ('Vishal', 'Singhal', 300000, '2014-02-20 09:00:00', 'HR'),
+    ('Amitabh', 'Singh', 500000, '2014-02-20 09:00:00', 'Admin'),
+    ('Vivek', 'Bhati', 500000, '2014-06-11 09:00:00', 'Admin'),
+    ('Vipul', 'Diwan', 200000, '2014-06-11 09:00:00', 'Account'),
+    ('Satish', 'Kumar', 75000, '2014-01-20 09:00:00', 'Account'),
+    ('Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00', 'Admin');
+
+SELECT * FROM worker
+WHERE salary BETWEEN 100000 AND 400000;
+
+SELECT * FROM worker
+WHERE salary BETWEEN 100000 AND 400000
+AND department != 'HR';
+
+SELECT MAX(salary) FROM worker;
+SELECT SUM(salary) FROM worker;
+SELECT AVG(salary) FROM worker;
+
+DROP TABLE IF EXISTS worker1;
+
+CREATE TABLE Worker1 (
+    WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    FIRST_NAME CHAR(25),
+    LAST_NAME CHAR(25),
+    SALARY INT,
+    JOINING_DATE DATETIME,
+    DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker 
+    (FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+    ('Monika', 'Arora', 100000, '2014-02-20 09:00:00', 'HR'),
+    ('Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin'),
+    ('Vishal', 'Singhal', 300000, '2014-02-20 09:00:00', 'HR'),
+    ('Amitabh', 'Singh', 500000, '2014-02-20 09:00:00', 'Admin'),
+    ('Vivek', 'Bhati', 500000, '2014-06-11 09:00:00', 'Admin'),
+    ('Vipul', 'Diwan', 200000, '2014-06-11 09:00:00', 'Account'),
+    ('Satish', 'Kumar', 75000, '2014-01-20 09:00:00', 'Account'),
+    ('Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00', 'Admin');
+
+SELECT * FROM worker1;
+
+DELETE FROM worker
+WHERE worker_id BETWEEN 9 AND 16;
+
+SELECT DISTINCT(department) FROM worker;
+
+SELECT first_name FROM worker
+UNION ALL
+SELECT first_name FROM worker1;
+
+SELECT first_name, salary FROM worker
+UNION ALL
+SELECT first_name, salary FROM worker1
+ORDER BY salary;
+
+SELECT first_name, salary FROM worker
+WHERE salary = 200000
+UNION
+SELECT first_name, salary FROM worker1
+WHERE salary = 100000
+ORDER BY first_name;
+
+SHOW FULL TABLES WHERE Table_type = 'VIEW';
+
+SELECT first_name, salary,
+CASE 
+    WHEN salary > 400000 THEN 'rich'
+    WHEN salary <= 400000 AND salary >= 100000 THEN 'middle'
+    WHEN salary < 100000 THEN 'poor'
+    ELSE 'data notfound'
+END AS status_of_workers
+FROM worker;
+
+SELECT first_name, last_name
+FROM worker 
+ORDER BY first_name DESC, last_name ASC;
+
+SELECT * FROM worker WHERE first_name LIKE '___i%';
+SELECT * FROM worker WHERE first_name LIKE '_i__';
+SELECT * FROM worker WHERE first_name LIKE 's%';
+SELECT * FROM worker WHERE first_name LIKE '_____';
+SELECT * FROM worker WHERE first_name LIKE '__[ad]%';
+
+CREATE VIEW admin_team AS 
+SELECT * FROM worker 
+WHERE department = 'Admin' AND salary < 200000;
+
+SELECT * FROM admin_team;
+
+CREATE OR REPLACE VIEW admin_team_status AS 
+SELECT * FROM worker 
+WHERE department = 'Admin' AND salary < 200000;
+
+SELECT * FROM admin_team_status;

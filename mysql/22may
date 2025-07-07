@@ -1,0 +1,92 @@
+USE worker;
+
+SELECT * FROM worker;
+
+SELECT department, COUNT(department) 
+FROM worker
+WHERE department = 'hr';
+
+SELECT COUNT(department)
+FROM worker
+GROUP BY department
+ORDER BY COUNT(department) DESC
+LIMIT 1;
+
+SELECT COUNT(department), department 
+FROM worker
+GROUP BY department 
+HAVING COUNT(department) > 2;
+
+SELECT * FROM (
+    SELECT department, COUNT(department) AS dept_count
+    FROM worker
+    GROUP BY department
+) AS dept_summary
+WHERE dept_count > 2;
+
+SELECT department, COUNT(department) 
+FROM worker
+GROUP BY department
+ORDER BY COUNT(department) DESC
+LIMIT 1 OFFSET 0;
+
+SELECT department, first_name 
+FROM worker 
+WHERE salary = (SELECT MAX(salary) FROM worker);
+
+CREATE TABLE student (
+    s_id INT,
+    s_name VARCHAR(20)
+);
+
+INSERT INTO student VALUES
+(1, 'pavan'),
+(2, 'kumar'),
+(3, 'babu'),
+(4, 'raju'),
+(5, 'asdfgh');
+
+DELETE FROM student WHERE s_id = 5;
+
+SELECT * FROM student;
+
+CREATE TABLE address (
+    s_id INT,
+    s_address VARCHAR(20)
+);
+
+INSERT INTO address VALUES
+(1, 'tuni'),
+(2, 'vizag'),
+(3, 'vellore'),
+(4, 'kakinada'),
+(5, 'hyderabad');
+
+SELECT * FROM address;
+
+SELECT * 
+FROM student 
+CROSS JOIN address;
+
+SELECT * 
+FROM student 
+INNER JOIN address 
+ON student.s_id = address.s_id;
+
+SELECT * 
+FROM student 
+LEFT OUTER JOIN address 
+ON student.s_id = address.s_id;
+
+SELECT * 
+FROM student 
+RIGHT OUTER JOIN address 
+ON student.s_id = address.s_id;
+
+SELECT DISTINCT salary
+FROM worker w1
+WHERE 4 = (
+    SELECT COUNT(DISTINCT salary)
+    FROM worker w2
+    WHERE w2.salary > w1.salary
+);
